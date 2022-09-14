@@ -168,8 +168,8 @@ describe("Sign up Controller", () => {
     });
     test("Should return 500 if AddAccount throws", async () => {
         const { sut , addAccountStub } = makeSut();
-        jest.spyOn(addAccountStub, "add").mockImplementationOnce(() => {
-            throw new Error();
+        jest.spyOn(addAccountStub, "add").mockImplementationOnce(async () => {
+            return new Promise((resolve, reject) => reject (new Error()));
         });
         const httpRequest = {
             body: {
