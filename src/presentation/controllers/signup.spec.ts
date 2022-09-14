@@ -13,7 +13,7 @@ const makeEmailValidator = (): EmailValidator => {
         }
     }
     return new EmailValidatorStub();
-};
+}; 
 const makeSut = (): SutTypes => {
     class EmailValidatorStub implements EmailValidator{
         isValid(email: string): boolean {
@@ -83,6 +83,21 @@ describe("Sign up Controller", () => {
         const httpResponse = sut.handle(httpRequest);
         expect(httpResponse.statusCode).toBe(400);
         expect(httpResponse.body).toEqual(new MissingParamError("passwordConfirmation"));
+    });
+    test("Should return 400 if password confirmation fails", () => { 
+        const { sut } = makeSut();
+
+        const httpRequest = {
+            body: {
+                name: "teste",
+                email: "teste@gmail.com",
+                password: "testepassword",
+                passwordConfirmation: "invalidpassword"
+            }
+        };
+        const httpResponse = sut.handle(httpRequest);
+        expect(httpResponse.statusCode).toBe(400);
+        expect(httpResponse.body).toEqual(new InvalidParamError("passwordConfirmation"));
     });
     test("Should return 400 if an invalid email is provided", () => { 
         const { sut, emailValidatorStub } = makeSut();
